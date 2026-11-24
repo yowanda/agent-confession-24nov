@@ -14,12 +14,22 @@ CONFESSION = (
 )
 
 
+def validate_confession(text: str) -> None:
+    if not text:
+        raise ValueError("confession must not be empty")
+    if "\n" in text or "\r" in text:
+        raise ValueError("confession must be a single line")
+    if not 1 <= len(text) <= 200:
+        raise ValueError("confession must be 1-200 characters")
+
+
 def main() -> None:
     out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR") or "/output"
     os.makedirs(out_dir, exist_ok=True)
+    validate_confession(CONFESSION)
     path = os.path.join(out_dir, "entry.txt")
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(CONFESSION)
+    with open(path, "wb") as f:
+        f.write(CONFESSION.encode("utf-8"))
 
 
 if __name__ == "__main__":
